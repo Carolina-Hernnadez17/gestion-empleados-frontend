@@ -1,0 +1,22 @@
+body {
+  background-color: #f4f4f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+.btn-primary {
+  background-color: #563ec8;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #452bb0;
+}
