@@ -16,14 +16,43 @@ export default function EmpleadoForm({ show, onClose, onSubmit, empleado }) {
   });
 
   useEffect(() => {
-    if (empleado) setForm({ ...empleado, fechaContratacion: empleado.fechaContratacion });
+    if (empleado) {
+      // Formatear la fecha al formato YYYY-MM-DD si viene en otro formato
+      let fechaFormateada = empleado.fechaContratacion;
+      if (fechaFormateada && fechaFormateada.length > 10) {
+        // Si viene como timestamp o con hora, extraer solo la fecha
+        fechaFormateada = fechaFormateada.substring(0, 10);
+      }
+      setForm({ ...empleado, fechaContratacion: fechaFormateada });
+    } else {
+      // Si no hay empleado (modo agregar), limpiar el formulario
+      setForm({
+        nombre: "",
+        apellido: "",
+        dui: "",
+        telefono: "",
+        correo: "",
+        direccion: "",
+        fechaContratacion: "",
+        puesto: "",
+        salario: "",
+        estado: "Activo",
+      });
+    }
   }, [empleado]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(form);
+    
+    // Asegurar que la fecha se envíe en formato YYYY-MM-DD
+    const formData = {
+      ...form,
+      fechaContratacion: form.fechaContratacion?.substring(0, 10) || form.fechaContratacion
+    };
+    
+    onSubmit(formData);
   };
 
   return (
@@ -59,7 +88,14 @@ export default function EmpleadoForm({ show, onClose, onSubmit, empleado }) {
           </Form.Group>
           <Form.Group className="mb-2">
             <Form.Label>Fecha Contratación</Form.Label>
-            <Form.Control type="date" name="fechaContratacion" value={form.fechaContratacion} onChange={handleChange} required />
+            <Form.Control 
+              type="date" 
+              name="fechaContratacion" 
+              value={form.fechaContratacion} 
+              onChange={handleChange} 
+              max={new Date().toISOString().split('T')[0]}
+              required 
+            />
           </Form.Group>
           <Form.Group className="mb-2">
             <Form.Label>Puesto</Form.Label>
